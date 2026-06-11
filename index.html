@@ -175,13 +175,13 @@ function render(){
 
  document.getElementById("entnahme")
  .innerText=umsatz.toFixed(2)+" €";
-}
+
 let historieHTML = "";
 
 historie
 .slice()
 .reverse()
-.forEach((eintrag,index)=>{
+.forEach((eintrag)=>{
 
   historieHTML += `
   <div style="
@@ -197,11 +197,10 @@ historie
   `;
 });
 
-document.getElementById(
-  "historieAnzeige"
-).innerHTML = historieHTML;
-}
+document.getElementById("historieAnzeige").innerHTML = historieHTML;
 
+}
+  
   function verkauf(name){
  daten[name]++;
  speichern();
