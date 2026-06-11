@@ -1,10 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vereinsheim Kasse</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f2f2f2;
+}
+
+.header{
+  background:white;
+  padding:15px;
+  position:sticky;
+  top:0;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+.stats{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.stat{
+  flex:1;
+  background:#e8f5e9;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:10px;
+}
+
+.card{
+  background:white;
+  border-radius:12px;
+  padding:15px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 2px 4px rgba(0,0,0,.1);
+}
+
+.card:active{
+  transform:scale(0.98);
+}
+
+.name{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.price{
+  color:#666;
+  margin-top:5px;
+}
+
+.count{
+  margin-top:10px;
+  font-size:28px;
+  font-weight:bold;
+}
+</style>
 </head>
+
 <body>
-<h1>⚽ Vereinsheim Kasse</h1>
-<p>Die App läuft!</p>
+
+<div class="header">
+  <h2>⚽ Vereinsheim Kasse</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <div>Umsatz</div>
+      <strong id="umsatz">0,00 €</strong>
+    </div>
+
+    <div class="stat">
+      <div>Kasse</div>
+      <strong id="kasse">150,00 €</strong>
+    </div>
+
+    <div class="stat">
+      <div>Entnahme</div>
+      <strong id="entnahme">0,00 €</strong>
+    </div>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+
+const artikel = [
+  {name:"🍺 Bier",preis:2.8},
+  {name:"📦 Bierkasten",preis:35},
+  {name:"🍺 Mixery",preis:2.8},
+  {name:"🍺 Mixery Blue",preis:2.8},
+  {name:"🥤 Cola",preis:2.3},
+  {name:"🥤 Fanta",preis:2.3},
+  {name:"🥤 Sprite",preis:2.3},
+  {name:"🥤 Gründels Fresh",preis:2.3},
+  {name:"💧 Sprudel",preis:1.8},
+  {name:"🧃 Eistee Zitrone",preis:1.8},
+  {name:"🧃 Eistee Pfirsich",preis:1.8}
+];
+
+let daten =
+JSON.parse(localStorage.getItem("vereinskasse"))
+|| {};
+
+artikel.forEach(a=>{
+ if(!daten[a.name]) daten[a.name]=0;
+});
+
+function speichern(){
+ localStorage.setItem(
+   "vereinskasse",
+   JSON.stringify(daten)
+ );
+ render();
+}
+
+function render(){
+
+ let html="";
+ let umsatz=0;
+
+ artikel.forEach(a=>{
+
+   umsatz += daten[a.name]*a.preis;
+
+   html += `
+   <div class="card"
+        onclick="verkauf('${a.name}')">
+     <div class="name">${a.name}</div>
+     <div class="price">${a.preis.toFixed(2)} €</div>
+     <div class="count">${daten[a.name]}</div>
+   </div>
+   `;
+ });
+
+ document.getElementById("grid").innerHTML=html;
+
+ document.getElementById("umsatz")
+ .innerText=umsatz.toFixed(2)+" €";
+
+ document.getElementById("kasse")
+ .innerText=(150+umsatz).toFixed(2)+" €";
+
+ document.getElementById("entnahme")
+ .innerText=umsatz.toFixed(2)+" €";
+}
+
+function verkauf(name){
+ daten[name]++;
+ speichern();
+}
+
+render();
+
+</script>
+
 </body>
 </html>
