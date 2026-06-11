@@ -311,27 +311,8 @@ document.getElementById("historieAnzeige").innerHTML = historieHTML;
     return;
   }
 
-    function verkaufAbschliessen(){
-
-  if(Object.keys(warenkorb).length === 0){
-    alert("Warenkorb ist leer");
-    return;
-  }
-
-  for(const name in warenkorb){
-
-    if(!daten[name]){
-      daten[name] = 0;
-    }
-
-    daten[name] += warenkorb[name];
-  }
-
-  warenkorb = {};
-
-  speichern();
-
-  alert("Verkauf abgeschlossen");
+function verkaufAbschliessen(){
+  alert("Button funktioniert");
 }
  
     warenkorb[name]--;
