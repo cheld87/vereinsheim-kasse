@@ -108,7 +108,11 @@ body{
 </div>
 
 <div class="grid" id="grid"></div>
+<hr>
 
+<h2>📈 Historie</h2>
+
+<div id="historieAnzeige"></div>
 <script>
 
 const artikel = [
@@ -172,7 +176,30 @@ function render(){
  document.getElementById("entnahme")
  .innerText=umsatz.toFixed(2)+" €";
 }
+let historieHTML = "";
 
+historie
+.slice()
+.reverse()
+.forEach((eintrag,index)=>{
+
+  historieHTML += `
+  <div style="
+    background:white;
+    padding:10px;
+    margin:10px;
+    border-radius:10px;
+  ">
+    <b>${eintrag.datum}</b><br>
+    ${eintrag.veranstaltung}<br>
+    Umsatz: ${eintrag.umsatz} €
+  </div>
+  `;
+});
+
+document.getElementById(
+  "historieAnzeige"
+).innerHTML = historieHTML;
 function verkauf(name){
  daten[name]++;
  speichern();
@@ -206,6 +233,7 @@ function tagesabschluss(){
   alert(
     "Tagesabschluss gespeichert"
   );
+  render();
 }render();
 
 </script>
