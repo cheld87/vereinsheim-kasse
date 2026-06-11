@@ -76,7 +76,18 @@ body{
 
 <div class="header">
   <h2>⚽ Vereinsheim Kasse</h2>
+<select id="veranstaltung">
+  <option>Training</option>
+  <option>Heimspiel Jugend</option>
+  <option>Heimspiel Aktive</option>
+  <option>Turnier</option>
+  <option>Vereinsfest</option>
+  <option>Sonstiges</option>
+</select>
 
+<button onclick="tagesabschluss()">
+📋 Tagesabschluss
+</button>
   <div class="stats">
     <div class="stat">
       <div>Umsatz</div>
@@ -110,7 +121,8 @@ const artikel = [
   {name:"🥤 Gründels Fresh",preis:2.3},
   {name:"💧 Sprudel",preis:1.8},
   {name:"🧃 Eistee Zitrone",preis:1.8},
-  {name:"🧃 Eistee Pfirsich",preis:1.8}
+  {name:"🧃 Eistee Pfirsich",preis:1.8},
+  {name:"☕ Kaffee",preis:1.5}
 ];
 
 let daten =
@@ -165,7 +177,35 @@ function verkauf(name){
  speichern();
 }
 
-render();
+let historie =
+JSON.parse(localStorage.getItem("historie"))
+|| [];
+
+function tagesabschluss(){
+
+  let umsatz = 0;
+
+  artikel.forEach(a=>{
+    umsatz += daten[a.name] * a.preis;
+  });
+
+  historie.push({
+    datum:new Date().toLocaleDateString("de-DE"),
+    veranstaltung:
+      document.getElementById("veranstaltung").value,
+    umsatz:umsatz.toFixed(2),
+    daten:{...daten}
+  });
+
+  localStorage.setItem(
+    "historie",
+    JSON.stringify(historie)
+  );
+
+  alert(
+    "Tagesabschluss gespeichert"
+  );
+}render();
 
 </script>
 
