@@ -127,7 +127,11 @@ Gesamt:
 </span>
 </h3>
 
-</div>
+    <button onclick="verkaufAbschliessen()">
+✅ Verkauf abschließen
+</button>
+
+  </div>
 
   <div class="grid" id="grid"></div>
 <hr>
@@ -307,7 +311,30 @@ document.getElementById("historieAnzeige").innerHTML = historieHTML;
     return;
   }
 
-  warenkorb[name]--;
+    function verkaufAbschliessen(){
+
+  if(Object.keys(warenkorb).length === 0){
+    alert("Warenkorb ist leer");
+    return;
+  }
+
+  for(const name in warenkorb){
+
+    if(!daten[name]){
+      daten[name] = 0;
+    }
+
+    daten[name] += warenkorb[name];
+  }
+
+  warenkorb = {};
+
+  speichern();
+
+  alert("Verkauf abgeschlossen");
+}
+ 
+    warenkorb[name]--;
 
   if(warenkorb[name] <= 0){
     delete warenkorb[name];
