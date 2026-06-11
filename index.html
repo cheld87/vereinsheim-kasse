@@ -156,13 +156,25 @@ function render(){
    umsatz += daten[a.name]*a.preis;
 
    html += `
-   <div class="card"
-        onclick="verkauf('${a.name}')">
-     <div class="name">${a.name}</div>
-     <div class="price">${a.preis.toFixed(2)} €</div>
-     <div class="count">${daten[a.name]}</div>
-   </div>
-   `;
+<div class="card">
+  <div class="name">${a.name}</div>
+  <div class="price">${a.preis.toFixed(2)} €</div>
+
+  <div style="margin-top:10px;">
+    <button onclick="minus('${a.name}')">➖</button>
+
+    <span style="
+      font-size:28px;
+      font-weight:bold;
+      margin:0 15px;
+    ">
+      ${daten[a.name]}
+    </span>
+
+    <button onclick="verkauf('${a.name}')">➕</button>
+  </div>
+</div>
+`;
  });
 
  document.getElementById("grid").innerHTML=html;
@@ -206,12 +218,22 @@ document.getElementById("historieAnzeige").innerHTML = historieHTML;
  speichern();
 }
 
+  function minus(name){
+
+  if(daten[name] > 0){
+    daten[name]--;
+    speichern();
+  }
+
+}
 let historie =
 JSON.parse(localStorage.getItem("historie"))
 || [];
 
 function tagesabschluss(){
-
+if(!confirm("Tagesabschluss durchführen?")){
+  return;
+}
   let umsatz = 0;
 
   artikel.forEach(a=>{
@@ -231,9 +253,16 @@ function tagesabschluss(){
     JSON.stringify(historie)
   );
 
-  alert(
-    "Tagesabschluss gespeichert"
-  );
+  if(confirm("Tagesabschluss speichern und Tageszähler zurücksetzen?")){
+
+  alert("Tagesabschluss gespeichert");
+
+  artikel.forEach(a=>{
+    daten[a.name] = 0;
+  });
+
+  speichern();
+}
   render();
 }render();
 
