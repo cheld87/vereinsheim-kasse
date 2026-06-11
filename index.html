@@ -228,11 +228,25 @@ for(const name in warenkorb){
 
   warenkorbGesamt += summe;
 
-  warenkorbHTML += `
-    <div>
-      ${name} x${menge}
-    </div>
-  `;
+ warenkorbHTML += `
+<div style="
+display:flex;
+justify-content:space-between;
+margin:5px 0;
+">
+
+<span>
+${name} x${menge}
+</span>
+
+<button
+onclick="warenkorbMinus('${name}')"
+>
+➖
+</button>
+
+</div>
+`;
 }
 
 if(warenkorbHTML === ""){
@@ -287,6 +301,21 @@ document.getElementById("historieAnzeige").innerHTML = historieHTML;
   render();
 }
 
+  function warenkorbMinus(name){
+
+  if(!warenkorb[name]){
+    return;
+  }
+
+  warenkorb[name]--;
+
+  if(warenkorb[name] <= 0){
+    delete warenkorb[name];
+  }
+
+  render();
+}
+  
   function minus(name){
 
   if(daten[name] > 0){
