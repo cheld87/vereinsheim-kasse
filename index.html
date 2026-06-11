@@ -107,7 +107,29 @@ body{
   </div>
 </div>
 
-<div class="grid" id="grid"></div>
+  <div style="
+background:white;
+margin:10px;
+padding:10px;
+border-radius:10px;
+">
+
+<h2>🛒 Aktueller Verkauf</h2>
+
+<div id="warenkorbAnzeige">
+Noch keine Artikel
+</div>
+
+<h3>
+Gesamt:
+<span id="warenkorbGesamt">
+0,00 €
+</span>
+</h3>
+
+</div>
+
+  <div class="grid" id="grid"></div>
 <hr>
 
 <h2>📈 Historie</h2>
@@ -138,7 +160,9 @@ artikel.forEach(a=>{
  if(!daten[a.name]) daten[a.name]=0;
 });
 
-function speichern(){
+  let warenkorb = {};
+
+  function speichern(){
  localStorage.setItem(
    "vereinskasse",
    JSON.stringify(daten)
@@ -188,7 +212,46 @@ function render(){
  document.getElementById("entnahme")
  .innerText=umsatz.toFixed(2)+" €";
 
-let historieHTML = "";
+  let warenkorbHTML = "";
+let warenkorbGesamt = 0;
+
+for(const name in warenkorb){
+
+  const artikelInfo =
+    artikel.find(a => a.name === name);
+
+  const menge =
+    warenkorb[name];
+
+  const summe =
+    menge * artikelInfo.preis;
+
+  warenkorbGesamt += summe;
+
+  warenkorbHTML += `
+    <div>
+      ${name} x${menge}
+    </div>
+  `;
+}
+
+if(warenkorbHTML === ""){
+  warenkorbHTML =
+    "Noch keine Artikel";
+}
+
+document.getElementById(
+  "warenkorbAnzeige"
+).innerHTML =
+  warenkorbHTML;
+
+document.getElementById(
+  "warenkorbGesamt"
+).innerText =
+  warenkorbGesamt.toFixed(2)
+  + " €";
+
+  let historieHTML = "";
 
 historie
 .slice()
@@ -214,8 +277,14 @@ document.getElementById("historieAnzeige").innerHTML = historieHTML;
 }
   
   function verkauf(name){
- daten[name]++;
- speichern();
+
+  if(!warenkorb[name]){
+    warenkorb[name] = 0;
+  }
+
+  warenkorb[name]++;
+
+  render();
 }
 
   function minus(name){
