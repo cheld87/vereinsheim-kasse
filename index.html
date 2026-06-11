@@ -305,23 +305,42 @@ document.getElementById("historieAnzeige").innerHTML = historieHTML;
   render();
 }
 
-  function warenkorbMinus(name){
+function warenkorbMinus(name){
 
   if(!warenkorb[name]){
     return;
   }
 
-function verkaufAbschliessen(){
-  alert("Button funktioniert");
-}
- 
-    warenkorb[name]--;
+  warenkorb[name]--;
 
   if(warenkorb[name] <= 0){
     delete warenkorb[name];
   }
 
   render();
+}
+
+function verkaufAbschliessen(){
+
+  if(Object.keys(warenkorb).length === 0){
+    alert("Warenkorb ist leer");
+    return;
+  }
+
+  for(const name in warenkorb){
+
+    if(!daten[name]){
+      daten[name] = 0;
+    }
+
+    daten[name] += warenkorb[name];
+  }
+
+  warenkorb = {};
+
+  speichern();
+
+  alert("Verkauf abgeschlossen");
 }
   
   function minus(name){
