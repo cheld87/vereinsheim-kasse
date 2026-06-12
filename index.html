@@ -127,6 +127,39 @@ Gesamt:
 </span>
 </h3>
 
+    <div style="margin-top:10px;">
+
+<h3>💵 Bezahlt</h3>
+
+<input
+  id="bezahlt"
+  type="number"
+  step="0.01"
+  placeholder="0.00"
+  oninput="berechneRueckgeld()"
+>
+
+</div>
+
+<h3>
+💰 Rückgeld:
+<span id="rueckgeld">
+0,00 €
+</span>
+</h3>
+
+    <div style="margin-bottom:10px;">
+
+<button onclick="setBezahlt(5)">5 €</button>
+
+<button onclick="setBezahlt(10)">10 €</button>
+
+<button onclick="setBezahlt(20)">20 €</button>
+
+<button onclick="setBezahlt(50)">50 €</button>
+
+</div>  
+
     <button onclick="verkaufAbschliessen()">
 ✅ Verkauf abschließen
 </button>
@@ -166,6 +199,8 @@ artikel.forEach(a=>{
 
   let warenkorb = {};
 
+  let warenkorbGesamt = 0;
+ 
   function speichern(){
  localStorage.setItem(
    "vereinskasse",
@@ -217,7 +252,7 @@ function render(){
  .innerText=umsatz.toFixed(2)+" €";
 
   let warenkorbHTML = "";
-let warenkorbGesamt = 0;
+warenkorbGesamt = 0;
 
 for(const name in warenkorb){
 
@@ -323,6 +358,19 @@ function warenkorbMinus(name){
 function verkaufAbschliessen(){
 
   if(Object.keys(warenkorb).length === 0){
+    let bezahlt =
+  parseFloat(
+    document.getElementById("bezahlt").value
+  ) || 0;
+
+if(bezahlt < warenkorbGesamt){
+
+  alert(
+    "Bezahlt kleiner als Gesamtbetrag"
+  );
+
+  return;
+}
     alert("Warenkorb ist leer");
     return;
   }
@@ -340,9 +388,42 @@ function verkaufAbschliessen(){
 
   speichern();
 
+  document.getElementById(
+  "bezahlt"
+).value = "";
+
+document.getElementById(
+  "rueckgeld"
+).innerText = "0,00 €";
+ 
   alert("Verkauf abgeschlossen");
 }
-  
+
+  function setBezahlt(betrag){
+
+  document.getElementById(
+    "bezahlt"
+  ).value = betrag;
+
+  berechneRueckgeld();
+}
+
+function berechneRueckgeld(){
+
+  let bezahlt =
+    parseFloat(
+      document.getElementById("bezahlt").value
+    ) || 0;
+
+  let rueckgeld =
+    bezahlt - warenkorbGesamt;
+
+  document.getElementById(
+    "rueckgeld"
+  ).innerText =
+    rueckgeld.toFixed(2) + " €";
+}  
+ 
   function minus(name){
 
   if(daten[name] > 0){
