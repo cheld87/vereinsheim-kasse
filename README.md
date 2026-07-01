@@ -1,1 +1,1 @@
-# vereinsheim-kasse
+# VereinsManager
