@@ -178,7 +178,7 @@ const artikel = [
   {name:"🍺 UrPils",preis:2.8},
   {name:"📦 Bierkasten",preis:35},
 
-  {name:"🍺 Weizenbier",preis:2.8},
+  {name:"🍺 Weizenbier",preis:3.8},
   {name:"🍺 Pils alkoholfrei",preis:2.8},
   {name:"🍺 Radler",preis:2.8},
 
@@ -195,8 +195,10 @@ const artikel = [
   {name:"🍏 Gründels Fresh",preis:2.3},
   {name:"🥤 Isogetränk",preis:1.8},
   {name:"🍺 Malzbier",preis:1.8},
-
-  {name:"⚡ Energy",preis:1.8},
+  {name:"🍺 Eistee Pfirsich",preis:1.8},
+  {name:"🍺 Eistee Zitrone",preis:1.8},
+  
+  {name:"⚡ Energy",preis:2.5},
   {name:"🧃 Capri-Sonne",preis:1.0},
 
   {name:"☕ Kaffee",preis:1.5}
@@ -210,8 +212,36 @@ artikel.forEach(a=>{
  if(!daten[a.name]) daten[a.name]=0;
 });
 
+  <div style="
+background:white;
+padding:10px;
+margin:10px;
+border-radius:10px;
+">
+
+<h2>🧾 Deckel</h2>
+
+<select id="deckelListe"
+onchange="deckelWechsel()">
+
+<option value="">Kein Deckel</option>
+
+</select>
+
+<button onclick="neuerDeckel()">
+➕ Neuer Deckel
+</button>
+
+</div>
+  
   let warenkorb = {};
 
+  let deckel = JSON.parse(
+  localStorage.getItem("deckel")
+) || {};
+
+let aktiverDeckel = "";
+  
   let warenkorbGesamt = 0;
  
   function speichern(){
@@ -222,6 +252,21 @@ artikel.forEach(a=>{
  render();
 }
 
+  let optionen =
+'<option value="">Kein Deckel</option>';
+
+for(const name in deckel){
+
+  optionen +=
+  `<option value="${name}">
+     ${name}
+   </option>`;
+}
+
+document.getElementById(
+  "deckelListe"
+).innerHTML =
+optionen;
 function render(){
 
  let html="";
@@ -338,6 +383,35 @@ historie
   `;
 });
 
+  function neuerDeckel(){
+
+  let name =
+    prompt("Name des Deckels");
+
+  if(!name) return;
+
+  if(!deckel[name]){
+
+    deckel[name]=[];
+
+  }
+
+  localStorage.setItem(
+    "deckel",
+    JSON.stringify(deckel)
+  );
+
+  render();
+}
+
+function deckelWechsel(){
+
+  aktiverDeckel =
+    document.getElementById(
+      "deckelListe"
+    ).value;
+
+}
 document.getElementById("historieAnzeige").innerHTML = historieHTML;
 
 }
@@ -490,3 +564,4 @@ if(!confirm("Tagesabschluss durchführen?")){
 
 </body>
 </html>
+
